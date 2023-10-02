@@ -13,10 +13,14 @@ function App() {
   });
 
   useEffect(() => {
-    API.get("/", {})
+    API.put("/task", {
+      id: 35,
+      task: "Morin",
+      completed: false,
+    })
       .then((res) => {
-        console.log(res.data);
-        setCount(res.data);
+        console.log(res);
+        // setCount(res.data);
       })
       .catch((err) => console.log("me", err));
   }, []);
