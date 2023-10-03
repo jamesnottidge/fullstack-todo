@@ -31,26 +31,6 @@
       "completed": false
     },
     {
-      "id": 3,
-      "task": "Morin",
-      "completed": false
-    },
-    {
-      "id": 3,
-      "task": "Morin",
-      "completed": false
-    },
-    {
-      "id": 3,
-      "task": "Morin",
-      "completed": false
-    },
-    {
-      "id": 3,
-      "task": "Morin",
-      "completed": false
-    },
-    {
       "id": 12,
       "task": "JAmes",
       "completed": false
@@ -58,16 +38,6 @@
     {
       "id": 1,
       "task": "JAmes",
-      "completed": false
-    },
-    {
-      "id": 3,
-      "task": "Morin",
-      "completed": false
-    },
-    {
-      "id": 3,
-      "task": "Morin",
       "completed": false
     }
   ]

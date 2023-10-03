@@ -6,9 +6,16 @@ import { Task } from "./types";
 // we should receive a task of this form:
 // {id: number, task: string, completed: boolean}
 
+
+export const getTasks = async () => {
+    const db = await getDB();
+    return db.tasks;
+}
+
 export const newTask = async (task: Task) => {
   await insertDB(task);
-  return task;
+  const tasks = await getTasks();
+  return tasks;
 };
 
 export const editTask = async (task: Task) => {
@@ -23,5 +30,14 @@ export const editTask = async (task: Task) => {
     });
     db = { ...db, tasks };
     await saveDB(db);
-    return task;
+    return tasks;
 }
+
+export const deleteTask = async (task: Task) => {
+    let db = await getDB();
+    let { tasks } = db;
+    tasks = tasks.filter((t) => t.id !== task.id);
+    db = { ...db, tasks };
+    await saveDB(db);
+    return tasks;
+};

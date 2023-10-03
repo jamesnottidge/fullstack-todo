@@ -13,11 +13,7 @@ function App() {
   });
 
   useEffect(() => {
-    API.put("/task", {
-      id: 35,
-      task: "Morin",
-      completed: false,
-    })
+    API.get("/tasks")
       .then((res) => {
         console.log(res);
         // setCount(res.data);

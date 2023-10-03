@@ -1,6 +1,6 @@
 import * as http from "node:http";
 import { IncomingMessage, ServerResponse } from "http";
-import { newTask, editTask } from "./tasks";
+import { newTask, editTask, deleteTask, getTasks } from "./tasks";
 import { Task } from "./types";
 
 function isTask(data: any): data is Task {
@@ -14,7 +14,7 @@ function isTask(data: any): data is Task {
   );
 }
 
-function doOnRequest(request: IncomingMessage, response: ServerResponse) {
+async function doOnRequest(request: IncomingMessage, response: ServerResponse) {
   response.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
   response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
   response.setHeader(
@@ -88,8 +88,53 @@ function doOnRequest(request: IncomingMessage, response: ServerResponse) {
    }
     } );
 
-  }
-  else {
+  } else if (method === "DELETE" && url === "/task") {
+    let body: any = [];
+    request
+      .on("data", (chunker) => {
+        body.push(chunker);
+        console.log("body", body);
+      })
+      .on("end", async () => {
+        body = JSON.parse(body);
+        console.log("me", body);
+        try {
+          const jsonData = body;
+          if (isTask(jsonData)) {
+            // The parsed JSON is valid and matches the Task type
+            const sendBack = await deleteTask(jsonData);
+            response.writeHead(200, { "Content-Type": "text/html" });
+            response.end(JSON.stringify(sendBack));
+          } else {
+            // The parsed JSON is not a valid Task
+            response.statusCode = 403;
+            response.statusMessage = "Not a Valid Task";
+            response.end();
+          }
+        } catch (error) {
+          // Handle JSON parsing errors here
+          console.log(error);
+          response.statusCode = 400;
+          response.statusMessage = "Invalid JSON";
+          response.end();
+        }
+      });
+  } else if (method === "GET" && url === "/tasks") {
+        try {
+            // The parsed JSON is valid and matches the Task type
+            const sendBack = await getTasks() ;
+            console.log(sendBack);
+            response.writeHead(200, { "Content-Type": "text/html" });
+            response.end(JSON.stringify(sendBack));
+        } catch (error) {
+          // Handle JSON parsing errors here
+          console.log(error);
+          response.statusCode = 400;
+          response.statusMessage = "Invalid JSON";
+          response.end();
+        }
+      
+  } else {
     setTimeout(() => {
       response.end("DANCING");
     }, 5000);
